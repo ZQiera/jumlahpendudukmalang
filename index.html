@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <!-- Menentukan standar dokumen HTML5 dan bahasa utama halaman (Bahasa Indonesia) -->
+    <meta charset="UTF-8">
+    
+    <!-- Mengatur agar tampilan web otomatis responsif dan menyesuaikan ukuran layar HP/Tablet/Desktop -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Judul yang muncul pada tab browser -->
+    <title>Sistem Informasi Statistik Kota Malang 2025</title>
+    
+    <!-- Mengambil font kustom 'Poppins' dari Google Fonts agar tampilan teks lebih modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* RESET CSS: Menghilangkan margin & padding bawaan browser agar tata letak konsisten */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* STYLE BODY: Mengatur warna latar belakang halaman, jenis font utama, dan jarak antar baris teks */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* STYLE TOP BAR: Mengatur bilah hitam paling atas tempat tombol login berada */
+        .top-bar {
+            background-color: #1a252f;
+            padding: 10px 10%;
+            text-align: right;
+        }
+        
+        /* STYLE TOMBOL LOGIN: Membentuk link menjadi tombol biru dengan sudut melengkung dan animasi hover */
+        .btn-login {
+            color: #fff;
+            text-decoration: none;
+            background-color: #3498db;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-login:hover {
+            background-color: #2980b9;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* STYLE HEADER BANNER: Mengatur latar belakang warna gradasi biru dan teks judul di bagian atas */
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .header h2 {
+            font-size: 26px;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .header h3 {
+            font-size: 16px;
+            font-weight: 300;
+            opacity: 0.9;
+            letter-spacing: 2px;
+        }
+
+        /* STYLE NAVIGASI MENU: Mengatur menu agar melayang/menempel di atas (sticky) saat di-scroll */
+        .nav-container {
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 12px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container a {
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            margin: 0 8px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        /* Menandai menu yang sedang aktif atau saat tombol di-hover mouse */
+        .nav-container a:hover, .nav-container a.active {
+            color: #1e3c72;
+            background-color: #eef2f7;
+            font-weight: 600;
+        }
+
+        /* STYLE CONTAINER: Pembungkus konten utama agar berada di tengah layar dengan lebar maksimal 1000px */
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* STYLE KARTU RINGKASAN: Mengatur tata letak 3 kotak statistik secara berjajar kesamping (Flexbox) */
+        .summary-cards {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .card {
+            flex: 1;
+            min-width: 250px;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-top: 4px solid #3498db; /* Garis warna biru atas kartu laki-laki */
+            transition: transform 0.3s ease;
+        }
+        /* Efek kartu sedikit terangkat naik saat disentuh kursor mouse */
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card.female { border-top-color: #e84393; } /* Garis warna pink untuk kartu perempuan */
+        .card.total { border-top-color: #2ed573; }  /* Garis warna hijau untuk kartu total */
+        .card h4 {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .card .value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        .card .unit {
+            font-size: 12px;
+            color: #95a5a6;
+        }
+
+        /* STYLE SECTION TABEL: Wadah putih melengkung pembungkus tabel data */
+        .table-section {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .table-section h3 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* STYLE TABEL DATA: Mengatur tampilan tabel, warna header, dan baris data */
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .custom-table th, .custom-table td {
+            padding: 12px 15px;
+        }
+        /* Header tabel berwarna biru gelap */
+        .custom-table thead tr {
+            background-color: #1e3c72;
+            color: #ffffff;
+            text-align: center;
+        }
+        .custom-table th {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .custom-table tbody tr {
+            border-bottom: 1px solid #eef2f7;
+            transition: background-color 0.2s ease;
+        }
+        /* Memberikan warna latar belakang selang-seling pada baris genap agar mudah dibaca */
+        .custom-table tbody tr:nth-of-type(even) {
+            background-color: #f8fafc;
+        }
+        /* Efek sorot baris saat kursor menunjuk ke salah satu baris tabel */
+        .custom-table tbody tr:hover {
+            background-color: #eef2f7;
+        }
+        .custom-table td {
+            color: #4a5568;
+        }
+        /* Class pembantu untuk rata tengah dan rata kanan teks */
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+
+        /* STYLE BARIS TOTAL: Memberikan warna abu-abu tebal khusus untuk baris rekapitulasi total */
+        .total-row {
+            background-color: #e2e8f0 !important;
+            font-weight: 700;
+            color: #1a202c;
+        }
+
+        /* STYLE FOOTER: Mengatur area bawah halaman berisi informasi hak cipta dan alamat */
+        .footer {
+            background-color: #1a252f;
+            color: #a0aec0;
+            text-align: center;
+            padding: 25px 20px;
+            margin-top: 50px;
+            font-size: 13px;
+        }
+        .footer b {
+            color: #ffffff;
+            font-size: 15px;
+        }
+
+        /* MEDIA QUERY RESPONSIVE: Penyesuaian tampilan khusus jika dibuka dari layar HP/layar kecil (maksimal 768px) */
+        @media (max-width: 768px) {
+            .nav-container a {
+                display: inline-block;
+                margin: 4px 2px;
+                font-size: 12px;
+            }
+            .custom-table th, .custom-table td {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BILAH ATAS: Menampung tombol Login Masuk di pojok kanan atas -->
+    <div class="top-bar">
+        <a href="#" class="btn-login">Login Masuk</a>
+    </div>
+
+    <!-- BANNER HEADER: Menampilkan identitas dan judul utama sistem informasi -->
+    <div class="header">
+        <h2>SISTEM INFORMASI STATISTIK</h2>
+        <h3>KOTA MALANG</h3>
+    </div>
+
+    <!-- MENU NAVIGASI: Pilihan kategori statistik (Tetap menempel di atas layar saat di-scroll) -->
+    <div class="nav-container">
+        <!-- Class 'active' menandai menu yang sedang dibuka saat ini -->
+        <a href="#" class="active">Penduduk</a>
+        <a href="#">Geografi & Iklim</a>
+        <a href="#">Pemerintahan</a>
+        <a href="#">Sosial</a>
+        <a href="#">Pertanian</a>
+        <a href="#">Industri</a>
+        <a href="#">Pariwisata & Keuangan</a>
+    </div>
+
+    <!-- KONTEN UTAMA: Wadah tengah pembungkus seluruh data visual -->
+    <div class="container">
+
+        <!-- KARTU METRIK RINGKASAN: Menampilkan highlight angka total penduduk secara ringkas -->
+        <div class="summary-cards">
+            <!-- Kartu 1: Jumlah Laki-Laki -->
+            <div class="card">
+                <h4>Laki-Laki</h4>
+                <div class="value">443,3</div>
+                <div class="unit">Ribu Jiwa</div>
+            </div>
+            <!-- Kartu 2: Jumlah Perempuan -->
+            <div class="card female">
+                <h4>Perempuan</h4>
+                <div class="value">448,6</div>
+                <div class="unit">Ribu Jiwa</div>
+            </div>
+            <!-- Kartu 3: Total Keseluruhan -->
+            <div class="card total">
+                <h4>Total Penduduk</h4>
+                <div class="value">891,9</div>
+                <div class="unit">Ribu Jiwa</div>
+            </div>
+        </div>
+
+        <!-- SECTION TABEL DATA: Menampilkan rincian data demografi penduduk -->
+        <div class="table-section">
+            <!-- Judul Tabel Statistik -->
+            <h3>Jumlah Penduduk Menurut Kelompok Umur dan Jenis Kelamin (Ribu Jiwa)<br>Kota Malang, Tahun 2025</h3>
+            
+            <table class="custom-table">
+                <!-- Head Tabel: Judul Kolom -->
+                <thead>
+                    <tr>
+                        <th>Kelompok Umur</th>
+                        <th>Penduduk Laki-Laki</th>
+                        <th>Penduduk Perempuan</th>
+                        <th>Total (Laki + Perempuan)</th>
+                    </tr>
+                </thead>
+                <!-- Body Tabel: Rincian Angka Data Berdasarkan Kelompok Umur -->
+                <tbody>
+                    <tr>
+                        <td class="text-center">0-4</td>
+                        <td class="text-right">22,5</td>
+                        <td class="text-right">21,1</td>
+                        <td class="text-right">43,6</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">5-9</td>
+                        <td class="text-right">34,8</td>
+                        <td class="text-right">32,6</td>
+                        <td class="text-right">67,3</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">10-14</td>
+                        <td class="text-right">36,3</td>
+                        <td class="text-right">34,3</td>
+                        <td class="text-right">70,6</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">15-19</td>
+                        <td class="text-right">34,8</td>
+                        <td class="text-right">33,3</td>
+                        <td class="text-right">68,1</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">20-24</td>
+                        <td class="text-right">34,3</td>
+                        <td class="text-right">32,7</td>
+                        <td class="text-right">66,9</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">25-29</td>
+                        <td class="text-right">33,7</td>
+                        <td class="text-right">32,8</td>
+                        <td class="text-right">66,5</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">30-34</td>
+                        <td class="text-right">33,4</td>
+                        <td class="text-right">33,1</td>
+                        <td class="text-right">66,4</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">35-39</td>
+                        <td class="text-right">32,6</td>
+                        <td class="text-right">32,4</td>
+                        <td class="text-right">64,9</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">40-44</td>
+                        <td class="text-right">36,0</td>
+                        <td class="text-right">35,4</td>
+                        <td class="text-right">71,4</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">45-49</td>
+                        <td class="text-right">33,4</td>
+                        <td class="text-right">33,3</td>
+                        <td class="text-right">66,7</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">50-54</td>
+                        <td class="text-right">29,2</td>
+                        <td class="text-right">30,0</td>
+                        <td class="text-right">59,2</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">55-59</td>
+                        <td class="text-right">25,4</td>
+                        <td class="text-right">27,7</td>
+                        <td class="text-right">53,1</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">60-64</td>
+                        <td class="text-right">20,4</td>
+                        <td class="text-right">23,9</td>
+                        <td class="text-right">44,3</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">65-69</td>
+                        <td class="text-right">16,2</td>
+                        <td class="text-right">18,8</td>
+                        <td class="text-right">35,0</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">70-74</td>
+                        <td class="text-right">10,3</td>
+                        <td class="text-right">12,1</td>
+                        <td class="text-right">22,4</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">75+</td>
+                        <td class="text-right">10,1</td>
+                        <td class="text-right">15,1</td>
+                        <td class="text-right">25,2</td>
+                    </tr>
+                    <!-- Baris Rekapitulasi Akhir Total Jumlah Seluruh Penduduk -->
+                    <tr class="total-row">
+                        <td class="text-center">Jumlah / Total</td>
+                        <td class="text-right">443,3</td>
+                        <td class="text-right">448,6</td>
+                        <td class="text-right">891,9</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- FOOTER: Menampilkan alamat resmi instansi pemerintah di bagian dasar web -->
+    <div class="footer">
+        <p><b>Pemerintah Kota Malang</b></p>
+        <p>Jl. Tugu No. 1, Kiduldalem, Kec. Klojen, Kota Malang, Jawa Timur 65111</p>
+    </div>
+
+</body>
+</html>
